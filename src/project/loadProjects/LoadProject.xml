@@ -1,0 +1,11 @@
+<loadProjects xmlns="http://xmlns.oracle.com/AgileObjects/Core/Project/V1">
+  <request xmlns="">
+    <messageId>Project WS Sample - LoadProject</messageId>
+    <messageName>Project WS Sample - LoadProject</messageName>
+    <projectIdentifiers>
+      <className>ActivitiesClass</className>
+      <objectId>@ROOTID@</objectId>
+      <subClassName>Program</subClassName>
+    </projectIdentifiers>
+  </request>
+</loadProjects>
