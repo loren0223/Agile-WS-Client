@@ -141,13 +141,13 @@ import search.quicksearch.QuickSearch;
 
 import search.whereusedquery.WhereUsedQuery;
 
-import table.addrows.AddRows;
+import table.addrows.AddRowsAffectedItems;
 import table.addrows.AddRowsAMLSite;
-import table.addrows.AddRowsRedlineChange;
+import table.addrows.AddRowsBOMRedlineChange;
 import table.addrows.AddRowsReferenceObject;
 import table.addrows.AddRowsSiteSpecific;
 
-import table.cleartable.ClearTable;
+import table.cleartable.ClearAffectedItemsTable;
 
 import table.copytable.CopyTable;
 
@@ -157,7 +157,7 @@ import table.loadtable.LoadTable;
 import table.loadtable.LoadTableFolderChangeHistory;
 import table.loadtable.LoadTableFolderPendingChanges;
 import table.loadtable.LoadTableFolderVersion;
-import table.loadtable.LoadTableRedlineChange;
+import table.loadtable.LoadTableBOMRedlineChange;
 import table.loadtable.LoadTableRevision;
 import table.loadtable.LoadTableSite;
 import table.removerows.RemoveAFRows;
@@ -266,16 +266,16 @@ public class RunAllSamples {
         GetSearchableAttributes objGetSearchableAttributes = new GetSearchableAttributes();
         QuickSearch objQuickSearch = new QuickSearch();
         WhereUsedQuery objWhereUsedQuery = new WhereUsedQuery();
-        AddRows objAddRows = new AddRows();
+        AddRowsAffectedItems objAddRows = new AddRowsAffectedItems();
         AddRowsAMLSite objAddRowsAMLSite = new AddRowsAMLSite();
-        AddRowsRedlineChange objAddRowsRedlineChange = new AddRowsRedlineChange();
+        AddRowsBOMRedlineChange objAddRowsRedlineChange = new AddRowsBOMRedlineChange();
         AddRowsSiteSpecific objAddRowsSiteSpecific = new AddRowsSiteSpecific();
-        ClearTable objClearTable = new ClearTable();
+        ClearAffectedItemsTable objClearTable = new ClearAffectedItemsTable();
         CopyTable objCopyTable = new CopyTable();
         IsReadOnly objIsReadOnly = new IsReadOnly();
         LoadTable objLoadTable = new LoadTable();
         LoadTableFolderVersion objLoadTableFolderVersion = new LoadTableFolderVersion();
-        LoadTableRedlineChange objLoadTableRedlineChange = new LoadTableRedlineChange();
+        LoadTableBOMRedlineChange objLoadTableRedlineChange = new LoadTableBOMRedlineChange();
         LoadTableRevision objLoadTableRevision = new LoadTableRevision();
         LoadTableSite objLoadTableSite = new LoadTableSite();
         RemoveRows objRemoveRows = new RemoveRows();
@@ -499,15 +499,15 @@ public class RunAllSamples {
     	System.out.println("Table Webservice samples"); 
     	System.out.println("-------------------------------------------"); 
     	System.out.println("\nRunning sample 75. 'AddRows'..."); 
-    	AddRows.main(args);
+    	AddRowsAffectedItems.main(args);
     	System.out.println("\nRunning sample 76. 'AddRowsAMLSite'..."); 
     	AddRowsAMLSite.main(args);
     	System.out.println("\nRunning sample 77. 'AddRowsRedlineChange'..."); 
-    	AddRowsRedlineChange.main(args);
+    	AddRowsBOMRedlineChange.main(args);
     	System.out.println("\nRunning sample 78. 'AddRowsSiteSpecific'..."); 
     	AddRowsSiteSpecific.main(args);
     	System.out.println("\nRunning sample 79. 'ClearTable'..."); 
-    	ClearTable.main(args);
+    	ClearAffectedItemsTable.main(args);
     	System.out.println("\nRunning sample 80. 'CopyTable'..."); 
     	CopyTable.main(args);
     	System.out.println("\nRunning sample 81. 'IsReadOnly'..."); 
@@ -517,7 +517,7 @@ public class RunAllSamples {
     	System.out.println("\nRunning sample 83. 'LoadTableFolderVersion'..."); 
     	LoadTableFolderVersion.main(args);
     	System.out.println("\nRunning sample 84. 'LoadTableRedlineChange'..."); 
-    	LoadTableRedlineChange.main(args);
+    	LoadTableBOMRedlineChange.main(args);
     	System.out.println("\nRunning sample 85. 'LoadTableRevision'..."); 
     	LoadTableRevision.main(args);
     	System.out.println("\nRunning sample 86. 'LoadTableSite'..."); 

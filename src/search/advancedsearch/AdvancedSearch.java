@@ -144,7 +144,7 @@ public class AdvancedSearch {
             
             // Specify the type of object has to be queried for, by providing the class
             // identifier details. Specify whether the search is to be case sensitive.
-            advancedSearchRequestType.setClassIdentifier("Part");
+            advancedSearchRequestType.setClassIdentifier("Parts");
             advancedSearchRequestType.setCaseSensitive(false);   
             
             // Advanced searches are executed by forming the search criteria 
@@ -152,15 +152,15 @@ public class AdvancedSearch {
             
             // The query listed here searches for all parts containing the
             // characters 'P0' and whose description holds a legitimate value.
-            String criteria = "[Title Block.Number] contains 'P0' && " +
-                              "[Title Block.Description] is not null";
+            String criteria = "[Title Block.Number(料號)] contains '1DS' && " +
+                              "[Title Block.Description] does not start with 'KEEP' ";
             advancedSearchRequestType.setCriteria(criteria);
             
             // The attributes that we desire to obtain as a part of the search 
             // result set may be explicitly specified as shown:            
-            String attribute1 = "Title Block.Number";
+            String attribute1 = "Title Block.Number(料號)";
             String attribute2 = "Title Block.Description";
-            String attribute3 = "Title Block.Lifecycle Phase";
+            String attribute3 = "Title Block.Status(狀態)";
             advancedSearchRequestType.getResultAttributes().add(attribute1);
             advancedSearchRequestType.getResultAttributes().add(attribute2);
             advancedSearchRequestType.getResultAttributes().add(attribute3);

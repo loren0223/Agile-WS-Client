@@ -45,7 +45,7 @@ import run.RunAllSamples;
  * The new row content with which the updation will be performed 
  * is specified in the form of appropriate message elements.
  */
-public class UpdateRows {
+public class UpdateRowsAffectedItem {
     private static final String COMMAND_NAME = "UpdateRows";
     
 	public static String clsName;
@@ -55,7 +55,7 @@ public class UpdateRows {
     public static String partNumber = "9YR8400100";;
     public static String changeNumber = "EC-00000008";
 
-    public UpdateRows() {
+    public UpdateRowsAffectedItem() {
              clsName = this.getClass().getName();
 
     }

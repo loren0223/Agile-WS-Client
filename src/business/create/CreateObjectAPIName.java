@@ -5,6 +5,10 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
 import org.w3c.dom.Element;
@@ -14,8 +18,10 @@ import com.agile.ws.schema.business.v1.jaxws.CreateObjectRequestType;
 import com.agile.ws.schema.business.v1.jaxws.CreateObjectResponseType;
 import com.agile.ws.schema.common.v1.jaxws.AgileExceptionListType;
 import com.agile.ws.schema.common.v1.jaxws.AgileExceptionType;
+import com.agile.ws.schema.common.v1.jaxws.AgileListEntryType;
 import com.agile.ws.schema.common.v1.jaxws.AgileRowType;
 import com.agile.ws.schema.common.v1.jaxws.ResponseStatusCode;
+import com.agile.ws.schema.common.v1.jaxws.SelectionType;
 import com.agile.ws.service.business.v1.jaxws.BusinessObjectPortType;
 import com.agile.ws.service.business.v1.jaxws.BusinessObjectService;
 import common.util.WSUtil;
@@ -199,10 +205,19 @@ public class CreateObjectAPIName {
              el_description = WSUtil.createMessageElement("description");
              el_description.setTextContent("Part Desc");
              
-          
-            row_2.getAny().add(el_number);  
-            row_2.getAny().add(el_description);   
-            agileCreateObjectRequest[1].setData(row_2);
+             AgileListEntryType partCategoryList = new AgileListEntryType(); 
+             SelectionType[] selection = new SelectionType[1]; 
+             selection[0] = new SelectionType(); 
+             selection[0].setValue(partCategory); 
+             partCategoryList.getSelection().add(selection[0]); 
+             
+             Element el_partcategory = WSUtil.createMessageElement("itemCategory", partCategoryList); 
+         
+             row_2.getAny().add(el_number);  
+             row_2.getAny().add(el_description);   
+             row_2.getAny().add(el_partcategory);
+             
+             agileCreateObjectRequest[1].setData(row_2);
                           
 
 

@@ -1,32 +1,33 @@
-package table.updaterows;
+package table.removerows;
 
 
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 
 import org.w3c.dom.Element;
 
-import com.agile.api.ChangeConstants;
 import com.agile.ws.schema.common.v1.jaxws.AgileExceptionListType;
 import com.agile.ws.schema.common.v1.jaxws.AgileExceptionType;
 import com.agile.ws.schema.common.v1.jaxws.AgileRowType;
 import com.agile.ws.schema.common.v1.jaxws.AgileTableType;
+import com.agile.ws.schema.common.v1.jaxws.AgileWarningListType;
+import com.agile.ws.schema.common.v1.jaxws.AgileWarningType;
+import com.agile.ws.schema.common.v1.jaxws.PropertyType;
 import com.agile.ws.schema.common.v1.jaxws.ResponseStatusCode;
-import com.agile.ws.schema.table.v1.jaxws.AgileUpdateRow;
-import com.agile.ws.schema.table.v1.jaxws.AgileUpdateRowsRequest;
+import com.agile.ws.schema.common.v1.jaxws.SchemaConstants;
+import com.agile.ws.schema.table.v1.jaxws.AddRowsRequestType;
+import com.agile.ws.schema.table.v1.jaxws.AddRowsResponseType;
+import com.agile.ws.schema.table.v1.jaxws.AgileAddRowsRequest;
+import com.agile.ws.schema.table.v1.jaxws.AgileRemoveRowsRequest;
 import com.agile.ws.schema.table.v1.jaxws.LoadTableRequestType;
 import com.agile.ws.schema.table.v1.jaxws.LoadTableResponseType;
+import com.agile.ws.schema.table.v1.jaxws.RemoveRowsRequestType;
+import com.agile.ws.schema.table.v1.jaxws.RemoveRowsResponseType;
 import com.agile.ws.schema.table.v1.jaxws.RequestTableType;
-import com.agile.ws.schema.table.v1.jaxws.UpdateRowsRequestType;
-import com.agile.ws.schema.table.v1.jaxws.UpdateRowsResponseType;
 import com.agile.ws.service.table.v1.jaxws.TablePortType;
 import com.agile.ws.service.table.v1.jaxws.TableService;
 import common.util.WSUtil;
@@ -34,28 +35,30 @@ import common.util.WSUtil;
 import run.DataPrepare;
 import run.RunAllSamples;
 
-	
+
+
  /**
- * Sample      : UpdateRows
+ * Sample      : RemoveRowsRedlineChange
  * Category    : Table webservice
  *
- * Description : This sample demonstrates the process of updating a row
- * of a table in an Agile object. The request object consists of
- * specifications identifying the table and the row to be updated. 
- * The new row content with which the updation will be performed 
- * is specified in the form of appropriate message elements.
+ * Description : This sample demonstrates the addition of rows to a table
+ * of a particular version of an Agile object. The change object associated with
+ * the object is specified as an option 'redline_change. The content of the row to be 
+ * added to the table is expressed in the form of message elements in the request
+ * object.
  */
-public class UpdateRows {
-    private static final String COMMAND_NAME = "UpdateRows";
+public class RemoveRowsBOMRedlineChange {
+    private static final String COMMAND_NAME = "RemoveRowsRedlineChange";
     
 	public static String clsName;
     public static String serviceName   =  "Table";    
     public static TablePortType agileStub;        
     
-    public static String partNumber = "9YR8400100";;
-    public static String changeNumber = "EC-00000008";
+    public static String parentPartNumber = "9PA5507300";
+    public static String[] childPartNumber = {"1DB000214BGP", "1DC0000914GP"};
+    public static String changeNumber = "EC-00000000";
 
-    public UpdateRows() {
+    public RemoveRowsBOMRedlineChange() {
              clsName = this.getClass().getName();
 
     }
@@ -69,7 +72,6 @@ public class UpdateRows {
     
     public static void setupServerLogin(String[] args) throws Exception {       
 
-         
     	//The AdminMetadataServiceLocator is used to obtain a AdminMetadata_BindingStub
     	URL url = new URL(args[0] + "/" + serviceName + "?WSDL"); 
     	TableService locator = 
@@ -86,7 +88,7 @@ public class UpdateRows {
           reqContext.put(BindingProvider.PASSWORD_PROPERTY, args[2]);
      }
     
- public static Integer getRowID(String cls, String objectNum, Object tableId, String childNum ) throws Exception{       
+    public static Integer getRowID(String cls, String objectNum, Object tableId, String childNum ) throws Exception{       
         
         LoadTableRequestType loadTableRequestType = new LoadTableRequestType();
         RequestTableType table[] = new RequestTableType[1];
@@ -94,7 +96,17 @@ public class UpdateRows {
         table[0].setClassIdentifier( cls );
         table[0].setObjectNumber(objectNum);
         table[0].setTableIdentifier( tableId.toString() );
+        
+        PropertyType properties[] = new PropertyType[1];
+        properties[0] = new PropertyType();
+        properties[0].setPropertyName("redline_change" );
+        properties[0].setPropertyValue( changeNumber );
+        table[0].getOptions().addAll(Arrays.asList(properties));
+        
         loadTableRequestType.getTableRequest().addAll(Arrays.asList(table));
+        
+        
+        
         Integer rowID = null;
         
         LoadTableResponseType loadTableResponseType = agileStub.loadTable(loadTableRequestType);
@@ -112,9 +124,9 @@ public class UpdateRows {
                             List<Element> messages = rows[j].getAny();
                             for(int m=0; m<messages.size(); m++){
                             	
-                            	if(messages.get(m) instanceof Element){
+                            	if( messages.get(m) instanceof Element){
 	                                Element element = (Element) messages.get(m);
-	                                
+	                           
 	                                if(! element.getTagName().equals("itemNumber") )
 	                                    continue;
 	                                else
@@ -123,7 +135,6 @@ public class UpdateRows {
 	                                else
 	                                       rowID = rows[j].getRowId();
                             	}
-                                
                               }                                    
                             }
                                 
@@ -148,7 +159,7 @@ public class UpdateRows {
         
     }
 
-	/**
+ 	/**
 	 * This sample can be configured by passing server url, user name and
 	 * password as program arguments in the same order. This method checks for
 	 * these values.
@@ -175,6 +186,7 @@ public class UpdateRows {
 		System.err.println("\t" + "password: the password");
 	}
 
+    /*    
     public static void prepareData(String[] args){
         
         try{
@@ -182,13 +194,15 @@ public class UpdateRows {
             DataPrepare dataPrepare = new DataPrepare(args[0], args[1], args[2]);
             dataPrepare.setupAdminMetadata(); 
             dataPrepare.setupBusiness();
+            dataPrepare.setupCollaboration();
             dataPrepare.setupTable();
             
-            partNumber = dataPrepare.createNewObject("Part");
+            parentPartNumber = dataPrepare.createNewObject("Part");
+            childPartNumber =  dataPrepare.createNewObject("Part");
             changeNumber = dataPrepare.getNextAutoNumber("ECO");
             dataPrepare.createObjectByTags("ECO", new String[]{"number"}, new String[]{changeNumber} );
             dataPrepare.addRow("ECO", changeNumber, "AffectedItems",
-                               "itemNumber", partNumber);
+                               "itemNumber", parentPartNumber);
             
             System.out.println("<<< DataPrepare successful >>>");
         }
@@ -197,14 +211,18 @@ public class UpdateRows {
             System.out.println("To run the sample without the assitance of prepared data, you may edit the static variables after");
             System.out.println("creating the necessary prerequisites through the Agile web client and then execute the sample >>>");
         }
+        
+        
     }
+    */
+
     public static void main(String[] args) {
         
         // This sample may be configured by either directly modifying the string values of
         // 'SERVER_URL', 'USERNAME' and 'PASSWORD' (defined in this class), or by
         // passing them as program arguments in the same order. In this sample, the
         // method 'checkArguments' checks for these values.
-        checkArguments(args);  
+        checkArguments(args);        
 
         // Comment this method out if you intend to use your own data
         // or scenario by editing the static variables at the top of this code
@@ -218,108 +236,88 @@ public class UpdateRows {
             // Login to the server by providing the server url and authentication credentials.
             setupServerLogin(args);             
             
-            // Create the request object UpdateRowsRequestType for the updateRows operation
-            // Create an array of requests of type AgileUpdateRowsRequestType. Batch operations may be
-            // performed by populating as many request objects as required to update several tables at once.
-            UpdateRowsRequestType updateRowsRequestType = new UpdateRowsRequestType();                         
-            AgileUpdateRowsRequest agileUpdateRowsRequest[] = new AgileUpdateRowsRequest[1];             
-            agileUpdateRowsRequest[0] = new AgileUpdateRowsRequest();
+            // Create the request object AddRowsRequestType for the addRows operation
+            // Create an array of requests of type AgileAddRowsRequestType. Batch operations may be
+            // performed by populating as many request objects as required to copy several tables at once.
+            RemoveRowsRequestType removeRowsRequestType = new RemoveRowsRequestType();                         
+            AgileRemoveRowsRequest agileRemoveRowsRequest[] = new AgileRemoveRowsRequest[2];             
+            agileRemoveRowsRequest[0] = new AgileRemoveRowsRequest();
+            agileRemoveRowsRequest[1] = new AgileRemoveRowsRequest();
             
-            // For each batched request, specify the following details:
-            // 1. The table whose rows will be updated
-            // 2. The rowId of the row that will be updated with new values
-            // 3. The new row that will replace the existing row.            
-            // 4. The updated content is specified in the form of Message Elements.
+            System.out.println("Removing a redline row to the Redline-Bom table of the part '" + parentPartNumber + "'...");    
+            System.out.println("Corresponding change object: '" + changeNumber + "'\n");
+                
+            agileRemoveRowsRequest[0].getRowId().add(getRowID("Parts", parentPartNumber, "-803", childPartNumber[0]));
+            agileRemoveRowsRequest[1].getRowId().add(getRowID("Parts", parentPartNumber, "-803", childPartNumber[1]));
             
-            // Using the updateRows webservice, in this particular case we modify the effective date
-            // attribute on the affected items table of a change object by finding and updating a specifc row.
+            // Important note: While updating the redline table of an item, the
+            // corresponding change object must also be mentioned. This is
+            // achieved by passing the same as a name value property of type
+            // 'PropertyType' and setting the same into the 'setOptions' method
+            // of the 'objectInfo' (RequestTableType) element            
             
-            // Tables in Agile webservices are defined as RequestTableType objects. A specifc
-            // table may be identified by specifying the class identifier and table identifier
-            // attributes as shown. Rows in Agile are defined as AgileRowType objects. Here
-            // message elements may be used to specify the row data. This is similar to how the 
-            // '_any' information is specified in a createObject or getObject Business service call.            
-
             RequestTableType table = new RequestTableType();
-            table.setClassIdentifier( "ECO" );
-            table.setObjectNumber( changeNumber
-                                   );
-            table.setTableIdentifier( "AffectedItems" );
+            table.setClassIdentifier("Parts");
+            table.setObjectNumber( parentPartNumber );
+            table.setTableIdentifier( "-803" );
+            // -803 corresponds to the redline BOM table
             
-            AgileUpdateRow updateRow[] = new AgileUpdateRow[1];           
-            updateRow[0] = new AgileUpdateRow();
+            PropertyType properties[] = new PropertyType[1];
+            properties[0] = new PropertyType();
+            properties[0].setPropertyName( SchemaConstants.REDLINE_CHANGE.value() );
+            properties[0].setPropertyValue( changeNumber );
+            table.getOptions().addAll(Arrays.asList(properties));            
             
-            // The method 'getRowID' which is also written in this sample program obtains the
-            // rowId of the specified part in the afffected items table of the change by issuing
-            // a loadTable webservice on the table and iterating through the rows till it finds
-            // the row queried for. The update row is then set with this rowId as shown.
-            updateRow[0].setRowId(getRowID("ECO", changeNumber, ChangeConstants.TABLE_AFFECTEDITEMS.toString(), partNumber ) );
-            AgileRowType row = new AgileRowType();
-            
-            // Specify the field to be updated through a message element attribute as shown:
-            String namespaceUri = null;
+            agileRemoveRowsRequest[0].setObjectInfo(table);                       
+            agileRemoveRowsRequest[1].setObjectInfo(table);        
 
-            Date date = new Date();
-            date.setTime( date.getTime() );
-            
-            GregorianCalendar c = new GregorianCalendar();
-            c.setTime(date);
-            XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-           System.out.println(date2.toString());
-            Element element = WSUtil.createMessageElement("EffectiveDataMsg");
-            element.setAttribute("attributeId", ChangeConstants.ATT_AFFECTED_ITEMS_EFFECTIVE_DATE.toString());
-            element.setTextContent(date2.toString());
-           
-            row.getAny().add(element);     
-
-            updateRow[0].setRow(row);
-            agileUpdateRowsRequest[0].getRow().addAll(Arrays.asList(updateRow));
-            agileUpdateRowsRequest[0].setObjectInfo(table);            
-
-            System.out.println("Updating the row containing the part '" + partNumber + "' in the affected items table");
-            System.out.println("of the change '" + changeNumber +  "', updating the effective date attribute to " + date + "...\n");
-            
-
-
-            // The request objects are set and the agile Stub is used to make the updateRows
+            // The request objects are set and the agile Stub is used to make the addRows
             // webservice call. The status code obtained from the response object is printed to
-            // verify the success of the updateRows operation. 
-            updateRowsRequestType.getData().addAll(Arrays.asList(agileUpdateRowsRequest));             
-            UpdateRowsResponseType updateRowsResponseType = agileStub.updateRows(updateRowsRequestType);
-            System.out.println("STATUS CODE: " +  updateRowsResponseType.getStatusCode() );
+            // verify the success of the addRows operation. 
+            removeRowsRequestType.getRows().addAll(Arrays.asList(agileRemoveRowsRequest));             
+            RemoveRowsResponseType removeRowsResponseType = agileStub.removeRows(removeRowsRequestType);
+            System.out.println("STATUS CODE: " +  removeRowsResponseType.getStatusCode() );
             
             
             // If the status code is not 'SUCCESS', then populate the list of exceptions
             // returned by the webservice. 
-            if( !updateRowsResponseType.getStatusCode().toString().equals( ResponseStatusCode.SUCCESS.value() ) ){
+            if( !removeRowsResponseType.getStatusCode().toString().equals( ResponseStatusCode.SUCCESS.value() ) ){
 
                 RunAllSamples.reportFailure( clsName );
                 
-                AgileExceptionListType[] agileExceptionListType = updateRowsResponseType.getExceptions().toArray(new AgileExceptionListType[0]);
+                AgileExceptionListType[] agileExceptionListType = removeRowsResponseType.getExceptions().toArray(new AgileExceptionListType[0]);
                 if(agileExceptionListType!=null)
                 for(int i=0; i<agileExceptionListType.length; i++){
                     AgileExceptionType exceptions[] = agileExceptionListType[i].getException().toArray(new AgileExceptionType[0]);
                     for(int j=0; j<exceptions.length; j++)
-                        System.out.println(exceptions[j].getMessage() );
+                        System.out.println("Exception: " + exceptions[j].getMessage() );
                 }
                 
+                AgileWarningListType agileWarningListType[] = removeRowsResponseType.getWarnings().toArray(new AgileWarningListType[0]);
+                if(agileWarningListType!=null)
+                for(int i=0; i<agileWarningListType.length; i++){
+                    AgileWarningType warnings[] = agileWarningListType[i].getWarning().toArray(new AgileWarningType[0]);
+                    for(int j=0; j<warnings.length; j++)
+                        System.out.println("Warning: " + warnings[j].getMessage() );
+                }                    
+                                
             }
                 else{
                 // If the webservice call was successful, then confirm the success of the operation
                     
+                	System.out.print("The specified row in ");
                     System.out.print(table.getTableIdentifier() + " of " + table.getObjectNumber() );
-                    System.out.println(" was updated with the specified row(s)");
+                    System.out.println(" was removed");
                 }
 
 
             }
-           
+          
             catch (Exception e) {            
              RunAllSamples.reportFailure( clsName );
              System.out.println("Exceptions: ");
              e.printStackTrace();
             }       
     }
-
 
 }

@@ -160,7 +160,7 @@ public static void displayMessageElementValue(Element element){
 
         // Comment this method out if you intend to use your own data
         // or scenario by editing the static variables at the top of this code
-        prepareData(args);
+        //prepareData(args);
 
         System.out.println("\n------------------------------------------------------------------------");
         System.out.println("Executing webservice sample: ");
@@ -185,19 +185,21 @@ public static void displayMessageElementValue(Element element){
              
              // For each request, set the class Identifier to denote the type of object to be retrieved and
              // the object identifier to specify the object number of the object to be retrieved.
-             agileGetObjectRequest[0].setClassIdentifier("Part");
-             agileGetObjectRequest[0].setObjectNumber(partNumber);
+             agileGetObjectRequest[0].setClassIdentifier("UsersClass");
+             agileGetObjectRequest[0].setObjectNumber("admin");
              
-             System.out.println("Retrieving object '" + partNumber + "'...\n");
+             //System.out.println("Retrieving object '" + partNumber + "'...\n");
 			
              // AgileDataTableRequestType is used to specifiy the tables pertaining to the Agile object
              // that will be retrieved by the 'getObject' webservice. The table identifier is used for this 
              // purpose. If the meta data is also required, then the boolean loadCellMetaData is set to 'true'
+             /*
              AgileDataTableRequestType tableRequests[] = new AgileDataTableRequestType[1];
              tableRequests[0] = new AgileDataTableRequestType();
              tableRequests[0].setTableIdentifier( ItemConstants.TABLE_ATTACHMENTS.toString() );
              tableRequests[0].setLoadCellMetaData(false);
-	     agileGetObjectRequest[0].getTableRequests().addAll(Arrays.asList(tableRequests));		
+             agileGetObjectRequest[0].getTableRequests().addAll(Arrays.asList(tableRequests));		
+             */
              
              // The request objects are set and the agile Stub is used to make the getObject
              // webservice call. The status code obtained from the response object is printed to

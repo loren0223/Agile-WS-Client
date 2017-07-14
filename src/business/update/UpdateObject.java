@@ -42,7 +42,7 @@ public class UpdateObject {
     public static String serviceName   =  "BusinessObject";       
     public static BusinessObjectPortType agileStub;        
     
-    public static String partNumber;
+    public static String partNumber = "ZP--";
 
     public UpdateObject() {
              clsName = this.getClass().getName();
@@ -128,7 +128,7 @@ public class UpdateObject {
 
         // Comment this method out if you intend to use your own data
         // or scenario by editing the static variables at the top of this code
-        prepareData(args);
+        //prepareData(args);
 
         System.out.println("\n------------------------------------------------------------------------");
         System.out.println("Executing webservice sample: ");
@@ -163,6 +163,9 @@ public class UpdateObject {
             Element element = WSUtil.createMessageElement("Message_Desc");
             element.setAttribute("attributeId", ItemConstants.ATT_TITLE_BLOCK_DESCRIPTION.toString());
             element.setTextContent("Updated value of Doc Description");
+            //element.setAttribute("attributeId", ItemConstants.ATT_TITLE_BLOCK_NUMBER.toString());
+            //element.setTextContent("ZP--");
+            
             
             // The data field of the request object is updated with the new row data
             rows.getAny().add(element);            
